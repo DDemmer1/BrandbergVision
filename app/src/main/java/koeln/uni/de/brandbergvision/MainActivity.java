@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.i("Score", result.getScore().toString());
                             buffer.append("Class: " + name +  "\n"
                                         + "Score: " + score + "% \n"
-                                        + "__________________________\n");
+                                        + "___________________________________\n");
 
 
                         }
