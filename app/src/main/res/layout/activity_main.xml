@@ -6,37 +6,41 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
+    <ImageButton
         android:id="@+id/button"
-        android:layout_width="167dp"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="108dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="52dp"
+        android:background="@drawable/roundedbutton"
         android:onClick="takePicture"
-        android:text="Take picture"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preview" />
+        android:src="@drawable/ic_camera"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:showAsAction="always" />
 
     <TextView
         android:id="@+id/detected_objects"
         android:layout_width="223dp"
         android:layout_height="178dp"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="80dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginBottom="52dp"
+        android:background="#D3D3D3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline" />
 
     <ImageView
         android:id="@+id/preview"
-        android:layout_width="171dp"
-        android:layout_height="196dp"
+        android:layout_width="223dp"
+        android:layout_height="227dp"
         android:layout_below="@+id/detected_objects"
-        android:layout_marginStart="108dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="88dp"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        android:src="@drawable/imageview"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline

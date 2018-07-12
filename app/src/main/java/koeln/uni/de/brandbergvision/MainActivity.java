@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ibm.watson.developer_cloud.android.library.camera.CameraHelper;
 import com.ibm.watson.developer_cloud.service.security.IamOptions;
@@ -17,6 +20,8 @@ import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassResult;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImages;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifyOptions;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -48,7 +53,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void takePicture(View view) {
-        helper.dispatchTakePictureIntent();
+//        helper.dispatchTakePictureIntent();
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .start(this);
     }
 
 
@@ -58,11 +66,28 @@ public class MainActivity extends AppCompatActivity {
                                     Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == CameraHelper.REQUEST_IMAGE_CAPTURE) {
-            final Bitmap photo = helper.getBitmap(resultCode);
-            final File photoFile = helper.getFile(resultCode);
+
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+//        if(requestCode == CameraHelper.REQUEST_IMAGE_CAPTURE) {
+//            final Bitmap photo = helper.getBitmap(resultCode);
+//            final File photoFile = helper.getFile(resultCode);
+
+            final Bitmap photo = result.getOriginalBitmap();
+            final File photoFile = new File(result.getUri().getPath());
+            Log.d("PHOTO",photoFile.getName());
             ImageView preview = findViewById(R.id.preview);
-            preview.setImageBitmap(photo);
+//            preview.setImageBitmap(photo);
+            preview.setImageURI(result.getUri());
+
+            try {
+                MediaStore.Images.Media.insertImage(getContentResolver(), result.getUri().getPath().toString() ,"bbv-" + System.currentTimeMillis() , "cropped Image");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(this, "Classifying your image. This may take a few seconds", Toast.LENGTH_LONG).show();
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
