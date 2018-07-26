@@ -11,8 +11,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="52dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="304dp"
         android:background="@drawable/roundedbutton"
         android:onClick="takePicture"
         android:src="@drawable/ic_camera"
@@ -27,7 +27,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="48dp"
         android:layout_marginBottom="52dp"
-        android:background="#D3D3D3"
+        android:background="@color/colorPrimary"
+        android:textColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline" />
 
@@ -39,6 +40,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="88dp"
         android:scaleType="fitCenter"
+        android:background="@color/colorPrimary"
         android:src="@drawable/imageview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

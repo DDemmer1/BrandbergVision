@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                                 .imagesFile(photoFile)
                                 .threshold((float) 0.3)
                                 .owners(Arrays.asList("me"))
-                                .addClassifierId("humanclassifier_2106950051")
+                                .addClassifierId("human_331446926")
                                 .build();
 
                         final ClassifiedImages output = vrClient.classify(classifyOptions).execute();
