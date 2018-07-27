@@ -7,5 +7,5 @@ Work in Progress repository of the "Brandberg Vision" App for Android
 
 
 TODO:
-- Implemention of in app training of classifiers
+- Implemention of in app training for classifiers
 - Settings function
