@@ -2,6 +2,7 @@ package koeln.uni.de.brandbergvision;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -33,18 +34,19 @@ public class MainActivity extends AppCompatActivity {
 
     private VisualRecognition vrClient;
     private CameraHelper helper;
+    private ErrorHandler errorHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Set focus on MainActivity
         setContentView(R.layout.activity_main);
 
 
-
+        //Setup Watson Visiual Recognition with API Key
         IamOptions options = new IamOptions.Builder()
                 .apiKey(getString(R.string.api_key))
                 .build();
-
         vrClient = new VisualRecognition("2018-07-01",options);
 
 
@@ -52,8 +54,11 @@ public class MainActivity extends AppCompatActivity {
         helper = new CameraHelper(this);
     }
 
+    /**
+     * Takes a picture with on board standard camera and gives it to cropping.
+     * @param view Needs view to show in
+     */
     public void takePicture(View view) {
-//        helper.dispatchTakePictureIntent();
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .start(this);
@@ -66,34 +71,37 @@ public class MainActivity extends AppCompatActivity {
                                     Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //initialize Error handler
+        errorHandler = new ErrorHandler(this);
 
-
+        // if Image got through cropping
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
-//        if(requestCode == CameraHelper.REQUEST_IMAGE_CAPTURE) {
-//            final Bitmap photo = helper.getBitmap(resultCode);
-//            final File photoFile = helper.getFile(resultCode);
 
             final Bitmap photo = result.getOriginalBitmap();
             final File photoFile = new File(result.getUri().getPath());
             Log.d("PHOTO",photoFile.getName());
             ImageView preview = findViewById(R.id.preview);
-//            preview.setImageBitmap(photo);
             preview.setImageURI(result.getUri());
 
+            //Store cropped image in gallery
             try {
-                MediaStore.Images.Media.insertImage(getContentResolver(), result.getUri().getPath().toString() ,"bbv-" + System.currentTimeMillis() , "cropped Image");
+                MediaStore.Images.Media.insertImage(getContentResolver(), result.getUri().getPath() ,"bbv-" + System.currentTimeMillis() , "cropped Image");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
+                errorHandler.printError("Something went wrong with your photo. Pls restart the app");
             }
+
+            //Prints a toast to the main act screen
             Toast.makeText(this, "Classifying your image. This may take a few seconds", Toast.LENGTH_LONG).show();
+
+            //run in async task to not fry the app
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-
-
                     try {
+                        //setup classifier options
                         ClassifyOptions classifyOptions = new ClassifyOptions.Builder()
                                 .imagesFile(photoFile)
                                 .threshold((float) 0.3)
@@ -102,12 +110,15 @@ public class MainActivity extends AppCompatActivity {
                                 .build();
 
                         final ClassifiedImages output = vrClient.classify(classifyOptions).execute();
-                        Log.i("KLASSE", output.getImages().get(0).getClassifiers().get(0).getClasses().get(0).getClassName());
+
+                        //Some debug prints
+                        Log.i("CLASS", output.getImages().get(0).getClassifiers().get(0).getClasses().get(0).getClassName());
                         Log.i("SCORE", output.getImages().get(0).getClassifiers().get(0).getClasses().get(0).getScore().toString());
+
 
                         List<ClassResult> classes = output.getImages().get(0).getClassifiers().get(0).getClasses();
 
-
+                        //iterate over all results and save into String
                        final StringBuffer buffer = new StringBuffer();
                         for(ClassResult result : classes){
 
@@ -122,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
                         }
 
-
+                    // Print results in results field
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -135,10 +146,20 @@ public class MainActivity extends AppCompatActivity {
 
 
                     } catch (FileNotFoundException e) {
+                        errorHandler.printError("File not found. Please try again or restart the App.");
+                        e.printStackTrace();
+                    } catch (IndexOutOfBoundsException e) {
+                        errorHandler.printError("Something went wrong. No Classes found . Please try again or restart the App.");
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        errorHandler.printError("Something went wrong.Please try again or restart the App.");
                         e.printStackTrace();
                     }
                 }
             });
         }
     }
+
+
+
 }

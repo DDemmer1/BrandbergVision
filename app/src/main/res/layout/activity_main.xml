@@ -11,53 +11,67 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="304dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="208dp"
         android:background="@drawable/roundedbutton"
         android:onClick="takePicture"
         android:src="@drawable/ic_camera"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:showAsAction="always" />
 
     <TextView
         android:id="@+id/detected_objects"
-        android:layout_width="223dp"
-        android:layout_height="178dp"
+        android:layout_width="308dp"
+        android:layout_height="165dp"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="48dp"
-        android:layout_marginBottom="52dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/colorPrimary"
         android:textColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/preview"
+        app:layout_constraintVertical_bias="0.75" />
 
     <ImageView
         android:id="@+id/preview"
-        android:layout_width="223dp"
+        android:layout_width="384dp"
         android:layout_height="227dp"
         android:layout_below="@+id/detected_objects"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="88dp"
-        android:scaleType="fitCenter"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="252dp"
+        android:adjustViewBounds="true"
         android:background="@color/colorPrimary"
+        android:cropToPadding="true"
+        android:scaleType="fitCenter"
         android:src="@drawable/imageview"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.625" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="-60dp" />
+        app:layout_constraintGuide_begin="0dp" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="4dp"
         android:text="Image:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -68,11 +82,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="232dp"
+        android:layout_marginBottom="208dp"
         android:text="Results:"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.13"
+        app:layout_constraintHorizontal_bias="0.128"
         app:layout_constraintStart_toStartOf="@+id/guideline" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="279dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
